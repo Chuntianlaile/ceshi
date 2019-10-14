@@ -13,8 +13,8 @@ parser = argparse.ArgumentParser(description='文本文件编码检测与转换'
 # nargs 设置参数数量，'+' 表示参数数量为正整数，help 为参数说明
 parser.add_argument('filenames', nargs='+', help='检测或转换的文件路径')
 # 带一个减号为短选项，带两个减号为长选项
-# nargs='?' 表示参数数量为 1 或 0 ，default 设置默认值
-parser.add_argument('-e', '--encoding', nargs='?', default='UTF-8',
+# nargs='?' 表示参数数量为 1 或 0 
+parser.add_argument('-e', '--encoding', nargs='?',
     help='''目标编码。支持的编码有：ASCII, (Default) UTF-8, UTF-16,
         UTF-32 (with a BOM), Big5, GB2312/GB18030, EUC-TW, EUC-JP, EUC-KR,
         HZ-GB-2312, ISO-2022-CN, ISO-2022-JP, ISO-2022-KR, ISO-8859-1,
@@ -38,6 +38,7 @@ if args.output:
 # 实例化一个通用探测器，用于检测文件的编码格式
 detector = UniversalDetector()
 print('编码格式 (置信度) : 文件名字')
+info = []
 for filename in args.filenames:
     # 探测器在使用前先进行重置
     detector.reset()
@@ -65,7 +66,8 @@ for filename in args.filenames:
     print('{} {:>8} :'.format(encoding.rjust(8), '({}%)'.format(
             confidence*100)), filename)
     # 如果探测器检测到了文件的编码格式，而且置信度超过六成
-    if encoding != 'Unknown' and confidence >= 0.6:
+    if (args.encoding and encoding != 'Unknown' and confidence >= 0.6 and
+            encoding != args.encoding):
         output_path = args.output + os.path.basename(filename) \
                 if args.output else filename
         # 打开被转换编码格式的文件
@@ -76,3 +78,10 @@ for filename in args.filenames:
         with open(output_path, 'w', encoding=args.encoding, 
                 errors='replace') as f:
             f.write(data)
+        info.append('{} 文件的编码格式已经从 {} 转换为 {}'.format(filename, 
+            encoding, args.encoding))
+
+if info:
+    print()
+    for i in info:
+        print(i)
