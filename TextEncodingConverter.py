@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description='文本文件编码检测与转换'
 
 # 'filename' 不带减号，表示该参数为位置参数，位置参数不带选项
 # nargs 设置参数数量，'+' 表示参数数量为正整数，help 为参数说明
-parser.add_argument('filenames', nargs='+', help='检测或转换的文件路径')
+parser.add_argument('filenames', nargs='+', help='被检测或转换的文件名称')
 # 带一个减号为短选项，带两个减号为长选项
 # nargs='?' 表示参数数量为 1 或 0 
 parser.add_argument('-e', '--encoding', nargs='?',
@@ -25,7 +25,7 @@ parser.add_argument('-o', '--output', help='输出目录')
 
 # 解析参数，得到 Namespace 对象
 args = parser.parse_args()
-# 输出目录不为空即视为开启转换, 若未指定转换编码，则默认为 UTF-8
+# 输出目录不为空即视为开启转换
 if args.output:
     # 检测用户提供的输出目录是否有效
     if not os.path.isdir(args.output):
