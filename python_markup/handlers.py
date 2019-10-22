@@ -1,3 +1,7 @@
+'''HTML 文本处理类，用于打印各种 HTML 标签
+'''
+
+
 class Handler:
     """
     处理程序父类
@@ -33,6 +37,8 @@ class HTMLRenderer(Handler):
     """
     HTML 处理程序，给文本块加相应的 HTML 标记
     """
+
+    # 以下各个方法分别在符合条件时被调用，打印标签或标签的 text 值
 
     def start_document(self):
         print('<html><head><title>ShiYanLou</title></head><body>')
