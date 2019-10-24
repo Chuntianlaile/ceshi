@@ -109,8 +109,8 @@ def decode_data_from_image(image):
     # 从图片的像素点数据中获得存储数据的二进制字符串
     binary = ''.join([bin(r)[-1] + bin(g)[-1] + bin(b)[-1] + bin(a)[-1]
             for r, g, b, a in image.getdata()])
-    # 出现连续 8 个 0 的字符串片段的索引判定为有效数据截止处
-    many_zero_index = binary.find('00000000')
+    # 出现连续 16 个 0 的字符串片段的索引判定为有效数据截止处
+    many_zero_index = binary.find('0' * 16)
     # 有效数据字符串的长度一定是 8 的倍数
     # 以此判定准确的断点索引，获得有效数据的二进制字符串
     end_index = (many_zero_index + 8 - many_zero_index % 8 
